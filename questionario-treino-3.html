@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Questionário de Treino | Treinador Tiago Rocha</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold: #C9A84C;
+      --gold-dark: #A8843A;
+      --gold-light: rgba(201,168,76,0.15);
+      --black: #0A0A0A;
+      --surface: #141414;
+      --surface2: #1C1C1C;
+      --border: #272727;
+      --text: #F0EDE6;
+      --text-muted: #888;
+      --text-soft: #C8C4BC;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--text);
+      font-family: 'Lato', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      padding-bottom: 80px;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      background: linear-gradient(160deg, #161616 0%, #0e0e0e 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 52px 24px 44px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .header::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent 0%, var(--gold) 50%, transparent 100%);
+    }
+    .header::after {
+      content: '';
+      position: absolute;
+      bottom: -60px; left: 50%;
+      transform: translateX(-50%);
+      width: 500px; height: 120px;
+      background: radial-gradient(ellipse, rgba(201,168,76,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .header-eyebrow {
+      font-family: 'Lato', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 10px;
+      opacity: 0.8;
+    }
+    .header-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+    .header-handle {
+      font-size: 13px;
+      color: var(--gold);
+      letter-spacing: 2px;
+      margin-bottom: 28px;
+      opacity: 0.85;
+    }
+    .header-divider {
+      width: 36px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 0 auto 24px;
+    }
+    .header-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 10px;
+      letter-spacing: 0.5px;
+    }
+    .header-subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+      line-height: 1.6;
+    }
+
+    /* ── BODY ── */
+    .container {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 40px 20px 0;
+    }
+
+    /* ── SECTION ── */
+    .section { margin-bottom: 48px; }
+    .section-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--gold);
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 28px;
+    }
+
+    /* ── QUESTION ── */
+    .question { margin-bottom: 28px; }
+    .question-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-soft);
+      margin-bottom: 12px;
+      line-height: 1.6;
+      letter-spacing: 0.2px;
+    }
+    .question-label .req { color: var(--gold); margin-left: 4px; }
+
+    /* ── INPUTS ── */
+    input[type="text"],
+    input[type="email"],
+    textarea {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      padding: 13px 16px;
+      font-size: 14px;
+      font-family: 'Lato', sans-serif;
+      font-weight: 300;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      -webkit-appearance: none;
+    }
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    textarea:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(201,168,76,0.08);
+    }
+    textarea {
+      resize: vertical;
+      min-height: 96px;
+      line-height: 1.7;
+    }
+    ::placeholder { color: #555; }
+
+    /* ── OPTIONS (radio/checkbox as cards) ── */
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+      gap: 10px;
+    }
+    .option-card { position: relative; }
+    .option-card input[type="radio"],
+    .option-card input[type="checkbox"] {
+      position: absolute;
+      opacity: 0;
+      width: 0; height: 0;
+    }
+    .option-card label {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: #777;
+      padding: 11px 14px;
+      font-size: 13px;
+      font-family: 'Lato', sans-serif;
+      font-weight: 400;
+      cursor: pointer;
+      line-height: 1.4;
+      transition: all 0.15s;
+      user-select: none;
+    }
+    .option-card label:hover {
+      border-color: #444;
+      color: #aaa;
+    }
+    .option-card label::before {
+      content: '○';
+      color: #444;
+      font-size: 12px;
+      flex-shrink: 0;
+      margin-top: 1px;
+      transition: all 0.15s;
+    }
+    .option-card input:checked + label {
+      background: var(--gold-light);
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+    .option-card input:checked + label::before {
+      content: '✦';
+      color: var(--gold);
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 40px 0;
+    }
+
+    /* ── SUBMIT BUTTON ── */
+    .btn-submit {
+      width: 100%;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+      border: none;
+      border-radius: 8px;
+      color: #0A0A0A;
+      padding: 17px 24px;
+      font-size: 13px;
+      font-family: 'Lato', sans-serif;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s;
+      margin-top: 8px;
+    }
+    .btn-submit:hover { opacity: 0.9; }
+    .btn-submit:active { transform: scale(0.99); }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* ── ERROR BANNER ── */
+    .error-banner {
+      display: none;
+      background: rgba(201,168,76,0.07);
+      border: 1px solid var(--gold);
+      border-radius: 6px;
+      padding: 13px 16px;
+      margin-bottom: 24px;
+      font-size: 13px;
+      color: var(--gold);
+      line-height: 1.5;
+    }
+
+    /* ── SUCCESS SCREEN ── */
+    #success-screen {
+      display: none;
+      min-height: 100vh;
+      background: var(--black);
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 24px;
+      flex-direction: column;
+    }
+    .success-icon {
+      width: 64px; height: 64px;
+      border: 2px solid var(--gold);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 28px;
+      font-size: 24px;
+      color: var(--gold);
+      animation: popIn 0.4s ease;
+    }
+    @keyframes popIn {
+      from { transform: scale(0.5); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .success-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+    .success-msg {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.7;
+      max-width: 360px;
+      margin: 0 auto 32px;
+    }
+    .success-sig {
+      font-size: 12px;
+      color: #555;
+      letter-spacing: 1px;
+    }
+    .success-sig strong {
+      display: block;
+      color: var(--gold);
+      font-weight: 400;
+      letter-spacing: 2px;
+      margin-top: 4px;
+    }
+
+    /* ── SIGNATURE FOOTER ── */
+    .signature {
+      margin-top: 56px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+    .sig-line {
+      width: 40px; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 0 auto 16px;
+    }
+    .sig-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 16px;
+      color: var(--text-soft);
+      letter-spacing: 1.5px;
+      margin-bottom: 4px;
+    }
+    .sig-handle {
+      font-size: 12px;
+      color: var(--gold);
+      letter-spacing: 2px;
+      opacity: 0.85;
+    }
+
+    /* ── FADE IN ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .header { animation: fadeUp 0.5s ease both; }
+    .container { animation: fadeUp 0.5s 0.1s ease both; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 480px) {
+      .header-title { font-size: 26px; }
+      .header-name { font-size: 22px; }
+      .options-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- SUCCESS SCREEN -->
+<div id="success-screen">
+  <div class="success-icon">✦</div>
+  <h2 class="success-title">Respostas enviadas!</h2>
+  <p class="success-msg">Obrigado por preencher o questionário. Em breve entrarei em contato com a sua programação de treino personalizada.</p>
+  <p class="success-sig">
+    Treinador Tiago Rocha
+    <strong>@treinador.tiagorocha</strong>
+  </p>
+</div>
+
+<!-- FORM -->
+<div id="form-wrap">
+  <div class="header">
+    <p class="header-eyebrow">Personal Trainer</p>
+    <h1 class="header-name">Treinador Tiago Rocha</h1>
+    <p class="header-handle">@treinador.tiagorocha</p>
+    <div class="header-divider"></div>
+    <h2 class="header-title">Questionário de Treino</h2>
+    <p class="header-subtitle">Preencha com atenção — suas respostas guiam toda a programação</p>
+  </div>
+
+  <div class="container">
+    <div class="error-banner" id="error-banner">
+      ⚠ Por favor, preencha todos os campos obrigatórios (marcados com ✦) antes de continuar.
+    </div>
+
+    <form id="main-form" novalidate>
+
+      <!-- IDENTIFICAÇÃO -->
+      <div class="section">
+        <p class="section-label">Identificação</p>
+
+        <div class="question">
+          <label class="question-label" for="nome">Nome completo<span class="req">✦</span></label>
+          <input type="text" id="nome" name="Nome completo" placeholder="Seu nome" required />
+        </div>
+        <div class="question">
+          <label class="question-label" for="idade">Idade</label>
+          <input type="text" id="idade" name="Idade" placeholder="Ex: 28 anos" />
+        </div>
+        <div class="question">
+          <label class="question-label" for="peso">Peso atual</label>
+          <input type="text" id="peso" name="Peso" placeholder="Ex: 75 kg" />
+        </div>
+        <div class="question">
+          <label class="question-label" for="altura">Altura</label>
+          <input type="text" id="altura" name="Altura" placeholder="Ex: 1,75 m" />
+        </div>
+      </div>
+      <hr class="divider" />
+
+      <!-- OBJETIVOS -->
+      <div class="section">
+        <p class="section-label">Objetivos</p>
+
+        <div class="question">
+          <label class="question-label">Qual é o seu principal objetivo com o treino?<span class="req">✦</span></label>
+          <div class="options-grid">
+            <div class="option-card"><input type="radio" name="Objetivo principal" id="obj1" value="Hipertrofia (ganho de massa)" /><label for="obj1">Hipertrofia (ganho de massa)</label></div>
+            <div class="option-card"><input type="radio" name="Objetivo principal" id="obj2" value="Emagrecimento" /><label for="obj2">Emagrecimento</label></div>
+            <div class="option-card"><input type="radio" name="Objetivo principal" id="obj3" value="Condicionamento físico" /><label for="obj3">Condicionamento físico</label></div>
+            <div class="option-card"><input type="radio" name="Objetivo principal" id="obj4" value="Saúde e qualidade de vida" /><label for="obj4">Saúde e qualidade de vida</label></div>
+            <div class="option-card"><input type="radio" name="Objetivo principal" id="obj5" value="Performance esportiva" /><label for="obj5">Performance esportiva</label></div>
+            <div class="option-card"><input type="radio" name="Objetivo principal" id="obj6" value="Outro" /><label for="obj6">Outro</label></div>
+          </div>
+        </div>
+        <div class="question">
+          <label class="question-label" for="obj_detalhe">Descreva seu objetivo com mais detalhes (opcional)</label>
+          <textarea id="obj_detalhe" name="Detalhes do objetivo" placeholder="Ex: quero definir o abdômen, melhorar meu fôlego para o futebol..."></textarea>
+        </div>
+      </div>
+      <hr class="divider" />
+
+      <!-- EXPERIÊNCIA -->
+      <div class="section">
+        <p class="section-label">Experiência & Histórico</p>
+
+        <div class="question">
+          <label class="question-label">Qual é o seu nível de experiência com treino?<span class="req">✦</span></label>
+          <div class="options-grid">
+            <div class="option-card"><input type="radio" name="Nível de experiência" id="exp1" value="Nunca treinei" /><label for="exp1">Nunca treinei</label></div>
+            <div class="option-card"><input type="radio" name="Nível de experiência" id="exp2" value="Menos de 6 meses" /><label for="exp2">Menos de 6 meses</label></div>
+            <div class="option-card"><input type="radio" name="Nível de experiência" id="exp3" value="6 meses a 1 ano" /><label for="exp3">6 meses a 1 ano</label></div>
+            <div class="option-card"><input type="radio" name="Nível de experiência" id="exp4" value="1 a 3 anos" /><label for="exp4">1 a 3 anos</label></div>
+            <div class="option-card"><input type="radio" name="Nível de experiência" id="exp5" value="Mais de 3 anos" /><label for="exp5">Mais de 3 anos</label></div>
+          </div>
+        </div>
+        <div class="question">
+          <label class="question-label" for="historico">Já treinou antes? Como era sua rotina?</label>
+          <textarea id="historico" name="Histórico de treino" placeholder="Conte um pouco sobre seus treinos anteriores..."></textarea>
+        </div>
+        <div class="question">
+          <label class="question-label" for="outras">Pratica alguma outra atividade física atualmente?</label>
+          <textarea id="outras" name="Outras atividades físicas" placeholder="Ex: futebol aos fins de semana, caminhadas, natação..."></textarea>
+        </div>
+      </div>
+      <hr class="divider" />
+
+      <!-- DISPONIBILIDADE -->
+      <div class="section">
+        <p class="section-label">Disponibilidade</p>
+
+        <div class="question">
+          <label class="question-label">Quantos dias por semana você pode treinar?<span class="req">✦</span></label>
+          <div class="options-grid">
+            <div class="option-card"><input type="radio" name="Dias por semana" id="dias2" value="2 dias" /><label for="dias2">2 dias</label></div>
+            <div class="option-card"><input type="radio" name="Dias por semana" id="dias3" value="3 dias" /><label for="dias3">3 dias</label></div>
+            <div class="option-card"><input type="radio" name="Dias por semana" id="dias4" value="4 dias" /><label for="dias4">4 dias</label></div>
+            <div class="option-card"><input type="radio" name="Dias por semana" id="dias5" value="5 dias" /><label for="dias5">5 dias</label></div>
+            <div class="option-card"><input type="radio" name="Dias por semana" id="dias6" value="6 dias" /><label for="dias6">6 dias</label></div>
+            <div class="option-card"><input type="radio" name="Dias por semana" id="diasf" value="Flexível" /><label for="diasf">Flexível</label></div>
+          </div>
+        </div>
+        <div class="question">
+          <label class="question-label">Quanto tempo disponível por sessão de treino?<span class="req">✦</span></label>
+          <div class="options-grid">
+            <div class="option-card"><input type="radio" name="Duração do treino" id="dur1" value="Até 30 min" /><label for="dur1">Até 30 min</label></div>
+            <div class="option-card"><input type="radio" name="Duração do treino" id="dur2" value="45 minutos" /><label for="dur2">45 minutos</label></div>
+            <div class="option-card"><input type="radio" name="Duração do treino" id="dur3" value="1 hora" /><label for="dur3">1 hora</label></div>
+            <div class="option-card"><input type="radio" name="Duração do treino" id="dur4" value="1h30" /><label for="dur4">1h30</label></div>
+            <div class="option-card"><input type="radio" name="Duração do treino" id="dur5" value="Mais de 1h30" /><label for="dur5">Mais de 1h30</label></div>
+          </div>
+        </div>
+        <div class="question">
+          <label class="question-label">Qual o melhor horário para treinar?</label>
+          <div class="options-grid">
+            <div class="option-card"><input type="radio" name="Horário de treino" id="hor1" value="Manhã cedo (antes das 9h)" /><label for="hor1">Manhã cedo (antes das 9h)</label></div>
+            <div class="option-card"><input type="radio" name="Horário de treino" id="hor2" value="Manhã (9h–12h)" /><label for="hor2">Manhã (9h–12h)</label></div>
+            <div class="option-card"><input type="radio" name="Horário de treino" id="hor3" value="Tarde (12h–18h)" /><label for="hor3">Tarde (12h–18h)</label></div>
+            <div class="option-card"><input type="radio" name="Horário de treino" id="hor4" value="Noite (após 18h)" /><label for="hor4">Noite (após 18h)</label></div>
+            <div class="option-card"><input type="radio" name="Horário de treino" id="hor5" value="Flexível" /><label for="hor5">Flexível</label></div>
+          </div>
+        </div>
+      </div>
+      <hr class="divider" />
+
+      <!-- LOCAL -->
+      <div class="section">
+        <p class="section-label">Local & Equipamentos</p>
+
+        <div class="question">
+          <label class="question-label">Onde você vai treinar?<span class="req">✦</span></label>
+          <div class="options-grid">
+            <div class="option-card"><input type="radio" name="Local de treino" id="loc1" value="Academia" /><label for="loc1">Academia</label></div>
+            <div class="option-card"><input type="radio" name="Local de treino" id="loc2" value="Em casa (com equipamentos)" /><label for="loc2">Em casa (com equipamentos)</label></div>
+            <div class="option-card"><input type="radio" name="Local de treino" id="loc3" value="Em casa (sem equipamentos)" /><label for="loc3">Em casa (sem equipamentos)</label></div>
+            <div class="option-card"><input type="radio" name="Local de treino" id="loc4" value="Ao ar livre" /><label for="loc4">Ao ar livre</label></div>
+            <div class="option-card"><input type="radio" name="Local de treino" id="loc5" value="Misto" /><label for="loc5">Misto</label></div>
+          </div>
+        </div>
+        <div class="question">
+          <label class="question-label" for="equipamentos">Quais equipamentos você possui (se treinar em casa)?</label>
+          <textarea id="equipamentos" name="Equipamentos disponíveis" placeholder="Ex: halteres até 20kg, barra fixa, elásticos..."></textarea>
+        </div>
+      </div>
+      <hr class="divider" />
+
+      <!-- SAÚDE -->
+      <div class="section">
+        <p class="section-label">Saúde & Limitações</p>
+
+        <div class="question">
+          <label class="question-label" for="lesoes">Possui alguma lesão ou limitação física?</label>
+          <textarea id="lesoes" name="Lesões e limitações" placeholder="Ex: hérnia de disco L4-L5, dor no joelho direito, bursite no ombro... (deixe em branco se não houver)"></textarea>
+        </div>
+        <div class="question">
+          <label class="question-label" for="restricoes">Algum exercício que não consegue ou prefere evitar?</label>
+          <textarea id="restricoes" name="Exercícios a evitar" placeholder="Ex: não consigo fazer agachamento profundo, sinto dor no supino..."></textarea>
+        </div>
+        <div class="question">
+          <label class="question-label" for="saude">Possui alguma condição de saúde relevante?</label>
+          <textarea id="saude" name="Condições de saúde" placeholder="Ex: hipertensão, diabetes, hipotireoidismo..."></textarea>
+        </div>
+      </div>
+      <hr class="divider" />
+
+      <!-- PREFERÊNCIAS -->
+      <div class="section">
+        <p class="section-label">Preferências</p>
+
+        <div class="question">
+          <label class="question-label" for="preferencias">Exercícios ou modalidades que você gosta?</label>
+          <textarea id="preferencias" name="Preferências de treino" placeholder="Ex: gosto de exercícios com peso livre, prefiro musculação a cardio..."></textarea>
+        </div>
+        <div class="question">
+          <label class="question-label" for="obs">Alguma observação adicional?</label>
+          <textarea id="obs" name="Observações" placeholder="Qualquer informação que ache relevante para o seu treino..."></textarea>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-submit" id="submit-btn">Enviar Questionário</button>
+
+      <div class="signature">
+        <div class="sig-line"></div>
+        <p class="sig-name">Treinador Tiago Rocha</p>
+        <p class="sig-handle">@treinador.tiagorocha</p>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+<script>
+  const form = document.getElementById('main-form');
+  const submitBtn = document.getElementById('submit-btn');
+  const errorBanner = document.getElementById('error-banner');
+  const formWrap = document.getElementById('form-wrap');
+  const successScreen = document.getElementById('success-screen');
+
+  const required = [
+    { field: 'nome', type: 'input' },
+    { field: 'Objetivo principal', type: 'radio' },
+    { field: 'Nível de experiência', type: 'radio' },
+    { field: 'Dias por semana', type: 'radio' },
+    { field: 'Duração do treino', type: 'radio' },
+    { field: 'Local de treino', type: 'radio' },
+  ];
+
+  function validate() {
+    let ok = true;
+    required.forEach(({ field, type }) => {
+      if (type === 'input') {
+        const el = document.getElementById(field);
+        if (!el.value.trim()) { el.style.borderColor = '#C0504A'; ok = false; }
+        else el.style.borderColor = '';
+      } else {
+        const checked = form.querySelector(`input[name="${field}"]:checked`);
+        if (!checked) ok = false;
+      }
+    });
+    return ok;
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errorBanner.style.display = 'none';
+
+    if (!validate()) {
+      errorBanner.style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Enviando...';
+
+    const data = new FormData(form);
+
+    try {
+      const res = await fetch('https://formsubmit.co/vieirarochatiago@gmail.com', {
+        method: 'POST',
+        body: data,
+        headers: { 'Accept': 'application/json' }
+      });
+
+      if (res.ok) {
+        formWrap.style.display = 'none';
+        successScreen.style.display = 'flex';
+        window.scrollTo({ top: 0 });
+      } else {
+        throw new Error('Erro no envio');
+      }
+    } catch {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Enviar Questionário';
+      errorBanner.textContent = '⚠ Erro ao enviar. Verifique sua conexão e tente novamente.';
+      errorBanner.style.display = 'block';
+    }
+  });
+
+  // highlight inputs on focus
+  document.querySelectorAll('input[type="text"], textarea').forEach(el => {
+    el.addEventListener('focus', () => el.style.borderColor = 'var(--gold)');
+    el.addEventListener('blur', () => el.style.borderColor = '');
+  });
+</script>
+</body>
+</html>
